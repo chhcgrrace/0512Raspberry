@@ -1,4 +1,5 @@
 import os
+# pyrefly: ignore [missing-import]
 from ultralytics import YOLO
 
 def main():
