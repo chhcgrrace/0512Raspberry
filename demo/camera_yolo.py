@@ -42,7 +42,16 @@ def main():
                 if probs is not None:
                     top1_idx = probs.top1
                     last_conf = probs.top1conf.item()
-                    last_label = result.names[top1_idx]
+                    raw_label = result.names[top1_idx]
+                    
+                    label_map = {"rock": "Rock", "paper": "Paper", "scissors": "Scissors"}
+                    mapped_label = label_map.get(str(raw_label).lower(), str(raw_label))
+                    
+                    # 信心度太低或者是未知手勢，歸類為 Error
+                    if last_conf < 0.6 or mapped_label not in ["Rock", "Paper", "Scissors"]:
+                        last_label = "Error"
+                    else:
+                        last_label = mapped_label
             
             last_prediction_time = current_time
             print(f"📸 拍照判定結果: {last_label} ({last_conf:.2f})")
